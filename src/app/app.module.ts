@@ -4,6 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { SimpleNotificationsModule } from 'angular2-notifications';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+import { FoldersService } from './folders.service';
 
 @NgModule({
   declarations: [
@@ -12,9 +16,13 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    SimpleNotificationsModule.forRoot(),
+    BrowserAnimationsModule,
+    MatButtonModule, 
+    MatCheckboxModule
   ],
-  providers: [],
+  providers: [FoldersService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

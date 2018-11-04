@@ -1,0 +1,69 @@
+.current-directory {
+    background-color: #20B2AA;
+    margin: 0;
+    padding: 10px;
+}
+
+.folder-view {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.quick-access {
+    background-color: #F08080;
+    margin: 0;
+    padding: 10px;
+}
+
+.no-folders-msg {
+    padding: 40px 0;
+}
+
+.sad-emoji {
+    margin: 0 10px;
+}
+
+.plus-icon, .delete-icon {
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.folder {
+    margin: 0 0 0 15px;
+}
+
+.folders {
+    margin: 10px 5px;
+}
+
+
+
+
+
+
+  
+.list-group.list-group-root {
+    padding: 0;
+    overflow: hidden;
+}
+
+.list-group.list-group-root .list-group {
+    margin-bottom: 0;
+}
+
+.list-group.list-group-root .list-group-item {
+    border-radius: 0;
+    border-width: 1px 0 0 0;
+}
+
+.list-group.list-group-root > .list-group-item:first-child {
+    border-top-width: 0;
+}
+
+.list-group.list-group-root > .list-group > .list-group-item {
+    padding-left: 30px;
+}
+
+.list-group.list-group-root > .list-group > .list-group > .list-group-item {
+    padding-left: 45px;
+}
