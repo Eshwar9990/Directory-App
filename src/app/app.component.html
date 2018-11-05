@@ -12,6 +12,8 @@
         {{currentDirectoryName}}
       <img height="25" src="../assets/round-add-button.svg" title="Add Folder" class="plus-icon" alt="Folder_Add Icon" style="float: right;" data-toggle="modal" data-target="#myModal">
       <img height="25" src="../assets/delete-button.svg" title="Delete" class="delete-icon" (click)="confirmDeletion()" alt="Folder_Delete Icon" style="float: right;">
+      <span style="float: right; cursor: pointer;" data-toggle="modal" data-target="#guideModal">Guide</span>
+
     </h2>
 
     <div *ngIf="showEmptyMessage;then emptyMessage else folderRows"></div>    
