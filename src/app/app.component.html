@@ -4,99 +4,14 @@
       Quick Access
     </h2>
 
-    <!-- <div class="list-group list-group-root well">
-  
-      <a href="#" class="list-group-item">Item 1</a>
-      <div class="list-group">
-        
-        <a href="#" class="list-group-item">Item 1.1</a>
-        <div class="list-group">
-          <a href="#" class="list-group-item">Item 1.1.1</a>
-          <a href="#" class="list-group-item">Item 1.1.2</a>
-          <a href="#" class="list-group-item">Item 1.1.3</a>
-        </div>
-        
-        <a href="#" class="list-group-item">Item 1.2</a>
-        <div class="list-group">
-          <a href="#" class="list-group-item">Item 1.2.1</a>
-          <a href="#" class="list-group-item">Item 1.2.2</a>
-          <a href="#" class="list-group-item">Item 1.2.3</a>
-        </div>
-        
-        <a href="#" class="list-group-item">Item 1.3</a>
-        <div class="list-group">
-          <a href="#" class="list-group-item">Item 1.3.1</a>
-          <a href="#" class="list-group-item">Item 1.3.2</a>
-          <a href="#" class="list-group-item">Item 1.3.3</a>
-        </div>
-        
-      </div>
-      
-      <a href="#" class="list-group-item">Item 2</a>
-      <div class="list-group">
-        
-        <a href="#" class="list-group-item">Item 2.1</a>
-        <div class="list-group">
-          <a href="#" class="list-group-item">Item 2.1.1</a>
-          <a href="#" class="list-group-item">Item 2.1.2</a>
-          <a href="#" class="list-group-item">Item 2.1.3</a>
-        </div>
-        
-        <a href="#" class="list-group-item">Item 2.2</a>
-        <div class="list-group">
-          <a href="#" class="list-group-item">Item 2.2.1</a>
-          <a href="#" class="list-group-item">Item 2.2.2</a>
-          <a href="#" class="list-group-item">Item 2.2.3</a>
-        </div>
-        
-        <a href="#" class="list-group-item">Item 2.3</a>
-        <div class="list-group">
-          <a href="#" class="list-group-item">Item 2.3.1</a>
-          <a href="#" class="list-group-item">Item 2.3.2</a>
-          <a href="#" class="list-group-item">Item 2.3.3</a>
-        </div>
-        
-      </div>
-      
-      
-      <a href="#" class="list-group-item">Item 3</a>
-      <div class="list-group">
-        
-        <a href="#" class="list-group-item">Item 3.1</a>
-        <div class="list-group">
-          <a href="#" class="list-group-item">Item 3.1.1</a>
-          <a href="#" class="list-group-item">Item 3.1.2</a>
-          <a href="#" class="list-group-item">Item 3.1.3</a>
-        </div>
-        
-        <a href="#" class="list-group-item">Item 3.2</a>
-        <div class="list-group">
-          <a href="#" class="list-group-item">Item 3.2.1</a>
-          <a href="#" class="list-group-item">Item 3.2.2</a>
-          <a href="#" class="list-group-item">Item 3.2.3</a>
-        </div>
-        
-        <a href="#" class="list-group-item">Item 3.3</a>
-        <div class="list-group">
-          <a href="#" class="list-group-item">Item 3.3.1</a>
-          <a href="#" class="list-group-item">Item 3.3.2</a>
-          <a href="#" class="list-group-item">Item 3.3.3</a>
-        </div>
-        
-      </div>
-      
-    </div>  -->
     <div class="list-group list-group-root well" id="quick-access-list">
-  
-      <a href="#" class="list-group-item">Item 1</a>
-     
-      
+
     </div>
   </div>
   <div class="col-lg-9 folder-view">
     <h2 class="current-directory">
       <img height="25" src="../assets/folder-up.svg" alt="Folder_Up Icon" (click)="folderUp()">
-      {{currentDirectory}}
+        {{currentDirectoryName}}
       <img height="25" src="../assets/round-add-button.svg" class="plus-icon" alt="Folder_Add Icon" style="float: right;" data-toggle="modal" data-target="#myModal">
       <img height="25" src="../assets/delete-button.svg" class="delete-icon" (click)="deleteItems()" alt="Folder_Delete Icon" style="float: right;">
     </h2>
@@ -112,9 +27,9 @@
           <p>Double click on the folder name to open it!</p>
     
           <div *ngFor="let folder of currentFolders">
-            <mat-checkbox></mat-checkbox>
+            <mat-checkbox [(ngModel)]="folder.isChecked"></mat-checkbox>
             <img height="35" src="../assets/folder.svg" class="folder" alt="Folder Icon">
-            <button mat-button (dblclick)="folderOpen(folder)">{{folder.text}}</button>
+            <button mat-button (dblclick)="folderOpen(folder)" style="text-align: left;">{{folder.text}}</button>
             <hr> 
           </div>
           

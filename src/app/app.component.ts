@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { NotificationsService } from 'angular2-notifications';
 import { FoldersService } from './folders.service';
 import { debug } from 'util';
@@ -19,13 +19,12 @@ export class AppComponent {
     pauseOnHover: true,
     clickToClose: true
   };
+  
   currentFolders = [];
   showEmptyMessage = true;
 
-  constructor(private notificationsService: NotificationsService, private foldersService: FoldersService) {}
-
-  ngOnInit() {
-    
+  constructor(private notificationsService: NotificationsService, private foldersService: FoldersService, private cdRef:ChangeDetectorRef, private elRef:ElementRef) {
+    Window["myComponent"] = this;
   }
 
   createFolder() {
@@ -34,7 +33,7 @@ export class AppComponent {
     } else {
       if(this.foldersService.folders.length == 0) {
         this.foldersService.folders.push({
-          "id" : 1, "parent" : "#", "text" : this.folderName 
+          "id" : 1, "parent" : "#", "text" : this.folderName, "isChecked": false
         });
       } else {
         for(let i=0;i<this.foldersService.folders.length;i++) {
@@ -44,7 +43,7 @@ export class AppComponent {
           } 
         }
         this.foldersService.folders.push({
-          "id" : this.foldersService.folders[this.foldersService.folders.length-1].id+1, "parent" : this.currentDirectory, "text" : this.folderName 
+          "id" : this.foldersService.folders[this.foldersService.folders.length-1].id+1, "parent" : this.currentDirectory, "text" : this.folderName, "isChecked": false
         });
       }
       this.getCurrentFolders();
@@ -60,7 +59,12 @@ export class AppComponent {
   }
 
   deleteItems() {
-
+    this.currentFolders.forEach((item, index) => {
+      if(item.isChecked == true) {
+        this.foldersService.folders.splice(index, 1);
+      }
+    });
+    this.getCurrentFolders();
   }
 
   folderUp() {
@@ -82,23 +86,60 @@ export class AppComponent {
   getCurrentFolders() { 
     if(this.foldersService.folders.length > 0) {
       this.currentFolders = [];
+      let zeroLevelIds = [];
+      document.getElementById("quick-access-list").innerHTML = '';
       for(let i=0;i<this.foldersService.folders.length;i++) {
         if(this.foldersService.folders[i].parent == this.currentDirectory) {
+
           this.currentFolders.push(this.foldersService.folders[i]);
         }
-        if(this.foldersService.folders[i].parent == '#') {
-          $('#quick-access-list').html(`<a href="#" class="list-group-item" id="`+ this.foldersService.folders[i].id +`">`+ this.foldersService.folders[i].text +`</a>`) 
-        } else {
 
-        }
+        console.log('ipdu', this.currentFolders);
+
+        
+        if(this.foldersService.folders[i].parent == '#') {
+          document.getElementById("quick-access-list").innerHTML += `<a  onclick="Window.myComponent.quickAccessJump(`+this.foldersService.folders[i].parent+`)" href="#" class="list-group-item" id="`+ this.foldersService.folders[i].id +`">`+ this.foldersService.folders[i].text +`</a>`;
+          zeroLevelIds.push(this.foldersService.folders[i].id);
+        } 
       }
+
+      this.quickAccessUpdation(zeroLevelIds);
     } 
+
     if(this.currentFolders.length == 0) {
       this.showEmptyMessage = true;
     } else {
       this.showEmptyMessage = false;
     }
 
+    
+  }
+
+  quickAccessJump(selectedParent) {
+    // this.currentFolders = [];
+    // for(let i=0;i<this.foldersService.folders.length;i++) {
+    //   if(this.foldersService.folders[i].id == selectedParent) {
+    //     this.currentDirectory = this.foldersService.folders[i].parent;
+    //   } 
+    // }
+    // this.getCurrentFolders();
+    this.currentFolders = [];
+  }
+
+  quickAccessUpdation(tempIds) {
+    let nextLevelIds = [];
+    tempIds.forEach(item => {
+      for(let i=0;i<this.foldersService.folders.length;i++) {
+        if(this.foldersService.folders[i].parent == item) {     
+          $(`<a href="#" onclick="Window.myComponent.quickAccessJump(`+this.foldersService.folders[i].parent+`)" style="padding-left: `+(parseInt($('#'+item).css("padding-left").replace(/px/,""))+15)+"px"+`;" class="list-group-item" id="`+ this.foldersService.folders[i].id +`">`+ this.foldersService.folders[i].text +`</a>`).insertAfter('#'+item);
+          nextLevelIds.push(this.foldersService.folders[i].id);
+        }
+
+      }
+    });
+    if(nextLevelIds.length > 0) {
+      this.quickAccessUpdation(nextLevelIds);
+    }
     
   }
 
