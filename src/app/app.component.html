@@ -1,38 +1,50 @@
 <div>
-  <div class="col-lg-3 folder-view">
+  <div class="col-lg-3 view-hierarchy">
     <h2 class="quick-access">
-      Quick Access
+      View Hierarchy
     </h2>
 
-    <div class="list-group list-group-root well" id="quick-access-list">
-
-    </div>
+    <div class="list-group list-group-root well" id="quick-access-list"></div>
   </div>
   <div class="col-lg-9 folder-view">
     <h2 class="current-directory">
-      <img height="25" src="../assets/folder-up.svg" alt="Folder_Up Icon" (click)="folderUp()">
-        {{currentDirectory}}
-      <img height="25" src="../assets/round-add-button.svg" class="plus-icon" alt="Folder_Add Icon" style="float: right;" data-toggle="modal" data-target="#myModal">
-      <img height="25" src="../assets/delete-button.svg" class="delete-icon" (click)="deleteItems()" alt="Folder_Delete Icon" style="float: right;">
+      <img height="25" title="Folder Up" class="folder-up-icon" src="../assets/folder-up.svg" alt="Folder_Up Icon" (click)="folderUp()">
+        {{currentDirectoryName}}
+      <img height="25" src="../assets/round-add-button.svg" title="Add Folder" class="plus-icon" alt="Folder_Add Icon" style="float: right;" data-toggle="modal" data-target="#myModal">
+      <img height="25" src="../assets/delete-button.svg" title="Delete" class="delete-icon" (click)="confirmDeletion()" alt="Folder_Delete Icon" style="float: right;">
     </h2>
 
     <div *ngIf="showEmptyMessage;then emptyMessage else folderRows"></div>    
     <ng-template #emptyMessage>
         <div class="no-folders-msg" *ngIf="showEmptyMessage">
-            <h4><img height="100" src="../assets/sad.svg" alt="Sad Emoticon" class="sad-emoji">You don't have any folders in this directory. Click on '+' icon to create one</h4>
+            <h4><img height="175" src="../assets/sad.svg" alt="Sad Emoticon" class="sad-emoji"><span style="margin: 0 20px; font-size: 20px;">You don't have any folders in this directory. Click on '+' icon to create one</span></h4>
         </div>
     </ng-template>
     <ng-template #folderRows>
         <div class="folders">
           <p>Double click on the folder name to open it!</p>
-    
-          <div *ngFor="let folder of currentFolders">
-            <mat-checkbox [(ngModel)]="folder.isChecked"></mat-checkbox>
-            <img height="35" src="../assets/folder.svg" class="folder" alt="Folder Icon">
-            <button mat-button (dblclick)="folderOpen(folder)" style="text-align: left;">{{folder.text}}</button>
-            <hr> 
-          </div>
           
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Folder Name</th>
+                <th>Last Modifed Time</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let folder of currentFolders">
+                <td>
+                  <mat-checkbox [(ngModel)]="folder.isChecked"></mat-checkbox>
+                  <button mat-button (dblclick)="folderOpen(folder)" style="text-align: left;"><img height="35" src="../assets/folder.svg" class="folder" alt="Folder Icon">{{folder.text}}</button>
+                </td>
+                <td>{{folder.lastModifiedAt | date: 'medium' }}</td>
+                <td>
+                  <img height="27" src="../assets/edit.svg" class="edit-icon" alt="Edit Icon" (click)="editFolderModal(folder)">
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
     </ng-template>
 
@@ -61,6 +73,72 @@
     </div>
 </div>
 
+<div class="modal fade" id="editModal" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Edit Folder</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+              <label for="usr">Name:</label>
+              <input type="text" class="form-control" id="usr" [(ngModel)]="editFolderName">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" (click)="editFolder()">Modify</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="guideModal" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Guide</h4>
+        </div>
+        <div class="modal-body">
+            <div class="list-type5">
+              <ol>
+                <li><a href="#">Create a Folder by clicking on plus icon at top right corner of this page</a></li>
+                <li>
+                  <a href="#">View Hierarchy is available at the left side of your application to give a better understanding of folder structures. <a href="../assets/viewHierarchy.png" target="_blank"><b>Click here to see how it looks like</b></a></a>
+                </li>
+                <li><a href="#">Folder up option is available left to the name of the current directory at the top</a></li>
+                <li><a href="#">Rename a folder by clicking on pencil icon(Edit icon)</a></li>
+                <li><a href="#">Delete folders by check boxing 1 or more folders
+                </a></li>
+                <li><a href="#">Open a folder by <strong>Double clicking</strong> on the folder</a></li>
+              </ol>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" role="dialog">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Confirm Deletion</h4>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to permanently delete these items?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="deleteItems(); closeDeleteModal(); deleteItemsMessage();">Delete</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+</div>
+
 <simple-notifications [options]="options"></simple-notifications>
-
-
